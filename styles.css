@@ -70,12 +70,12 @@ body {
 .top-bar-right {
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
 .top-link {
     text-decoration: none;
     color: #666;
-    margin-right: 20px;
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -330,15 +330,15 @@ body {
     width: 100%;
     line-height: 0;
     z-index: 10;
-    pointer-events: none; /* Altındaki linklere tıklanabilsin */
+    pointer-events: none;
 }
 
 .wave-container svg {
     display: block;
-    width: calc(100% + 5px); /* Yanlarda mikroskobik boşluk kalmasın diye */
+    width: calc(100% + 5px);
     height: 110px;
     margin-left: -2px;
-    margin-bottom: -1px; /* Beyaz bölüme tam kenetlenmesi için */
+    margin-bottom: -1px;
 }
 
 /* --- 7. KAYAN YAZI (MARQUEE) --- */
@@ -515,7 +515,7 @@ body {
 }
 
 .google-overall-rating {
-    display: flex; /* İki ayrı google-overall-rating tanımı birleştirildi */
+    display: flex;
     align-items: center;
     background: #fdfdfd;
     padding: 10px 20px;
@@ -701,7 +701,14 @@ footer {
 /* --- 11. MEDIA QUERIES (EN ALTTA TOPLANDI) --- */
 /* Tablet & Mobile (992px) */
 @media (max-width: 992px) {
-    body.menu-open {
+    .page-wrapper {
+        transition: transform 0.4s ease-in-out !important;
+        transform: translateX(0);
+        width: 100%;
+    }
+
+    body.menu-open .page-wrapper {
+        transition: transform 0.4s ease-in-out !important;
         transform: translateX(-300px);
         overflow: hidden;
     }
@@ -713,6 +720,10 @@ footer {
 
     .navbar {
         height: 70px;
+    }
+
+    .nav-links {
+        display: none;
     }
 
     .nav-inner {
@@ -733,40 +744,52 @@ footer {
         display: flex;
     }
 
-    .nav-links {
+    .menu-links {
         position: fixed !important;
         top: 0 !important;
         right: -300px !important;
         width: 300px !important;
         height: 100vh !important;
-        visibility: hidden;
         gap: 15px;
         background: #ffffff;
+        visibility: hidden;
+        display: flex;  
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
         flex-direction: column;
         justify-content: center;
         z-index: 2000;
-        transition: none !important;
+        transition: right 0.4s ease-in-out !important;
     }
 
-    body.menu-open .nav-links {
-        right: -300px !important;
+    body.menu-open .menu-links {
+        right: 0% !important;
         visibility: visible;
+        display: flex !important;
     }
 
-    .nav-links li {
+    .menu-links .menu-list li {
+        list-style: none !important;
         width: 100%;
         padding-left: 50px;
     }
 
-    .nav-links li a {
+    .menu-links .menu-list li a {
+        font-family: 'Open Sans', sans-serif !important;
+        text-decoration: none;
         color: #333;
         font-size: 20px;
-        font-weight: 800;
-        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        transition: color 0.3s;
+        position: relative;
     }
 
-    .nav-links li a::after {
+    .menu-links .menu-list li a:hover {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+    .menu-links .menu-list li a::after {
         content: '';
         position: absolute;
         left: 0;
@@ -777,8 +800,8 @@ footer {
         transition: width 0.4s ease-in-out;
     }
 
-    .nav-links li a:hover::after,
-    .nav-links li.active a::after {
+    .menu-links .menu-list li a:hover::after,
+    .menu-links .menu-list li.active a::after {
         width: 100%;
         background-color: rgba(0, 0, 0, 0.7);
     }
@@ -874,11 +897,11 @@ footer {
     .wa-container {
         right: 15px !important;
         bottom: 15px !important;
-        transform: scale(1); /* Mobilde çok küçük olmaması için ölçeği 1 yap */
+        transform: scale(1);
     }
 
     .wa-bubble {
-        width: 55px; /* Mobilde parmakla basmak daha kolay olsun diye hafif büyüttük */
+        width: 55px;
         height: 55px;
     }
 }

@@ -1,44 +1,53 @@
-// YouTube Iframe API hazır olduğunda çalışacak mekanizma
-var iframe = document.querySelector('.video-background iframe');
+var iframe = document.querySelector(".video-background iframe");
 
-document.addEventListener("visibilitychange", function() {
+document.addEventListener("visibilitychange", function () {
+  if (iframe) {
     if (document.hidden) {
-        // Sekme gizlendiğinde videoyu duraklat
-        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        console.log("Sekme aktif değil, video durduruldu.");
+      iframe.contentWindow.postMessage(
+        '{"event":"command","func":"pauseVideo","args":""}',
+        "*",
+      );
     } else {
-        // Sekmeye geri dönüldüğünde videoyu oynat
-        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        console.log("Sekme aktif, video devam ediyor.");
+      iframe.contentWindow.postMessage(
+        '{"event":"command","func":"playVideo","args":""}',
+        "*",
+      );
     }
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  /* --- 1. DİL MENÜSÜ KONTROLÜ --- */
-  const langBtn = document.querySelector(".lang-btn");
-  const langMenu = document.querySelector(".lang-menu");
+  /* --- DİL MENÜSÜ --- */
+  const langBtn = document.querySelector(".lang-selected");
+  const langList = document.querySelector(".lang-list");
 
-  if (langBtn && langMenu) {
+  if (langBtn && langList) {
     langBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isVisible = langMenu.style.display === "block";
-      langMenu.style.display = isVisible ? "none" : "block";
+      const isVisible = langList.style.opacity === "1";
+      langList.style.opacity = isVisible ? "0" : "1";
+      langList.style.visibility = isVisible ? "hidden" : "visible";
+      langList.style.transform = isVisible
+        ? "translateY(10px)"
+        : "translateY(0)";
     });
 
     document.addEventListener("click", () => {
-      langMenu.style.display = "none";
+      langList.style.opacity = "0";
+      langList.style.visibility = "hidden";
+      langList.style.transform = "translateY(10px)";
     });
   }
 
-  /* --- 2. MOBİL MENÜ (HAMBURGER) KONTROLÜ --- */
+  /* --- MOBİL MENÜ --- */
   const menuToggle = document.getElementById("menuToggle");
-  const navLinks = document.getElementById("navLinks");
+  const menuLinks = document.getElementById("menuLinks");
   const htmlElement = document.documentElement; // html etiketini seç
 
-  if (menuToggle && navLinks) {
+  if (menuToggle && menuLinks) {
     menuToggle.addEventListener("click", (e) => {
       e.stopPropagation();
-      navLinks.classList.toggle("active");
+      menuLinks.classList.toggle("active");
       menuToggle.classList.toggle("open");
       document.body.classList.toggle("menu-open");
 
@@ -47,9 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
       htmlElement.classList.toggle("no-scroll");
     });
 
-    document.querySelectorAll(".nav-links a").forEach((link) => {
+    document.querySelectorAll(".menu-links a").forEach((link) => {
       link.addEventListener("click", () => {
-        navLinks.classList.remove("active");
+        menuLinks.classList.remove("active");
         menuToggle.classList.remove("open");
         document.body.classList.remove("menu-open");
         // Sınıfları kaldır
@@ -57,11 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
         htmlElement.classList.remove("no-scroll");
       });
     });
-    
 
     document.addEventListener("click", (e) => {
-      if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-        navLinks.classList.remove("active");
+      if (!menuLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+        menuLinks.classList.remove("active");
         menuToggle.classList.remove("open");
         document.body.classList.remove("menu-open");
         // Sınıfları kaldır
@@ -71,9 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* --- 3. SWIPER (YORUM SLIDER) AYARLARI --- */
+  /* --- SWIPER --- */
+  let swiperInstance;
   if (document.querySelector(".mySwiper")) {
-    const swiper = new Swiper(".mySwiper", {
+    swiperInstance = new Swiper(".mySwiper", {
       slidesPerView: 1,
       spaceBetween: 30,
       pagination: {
@@ -81,12 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
         clickable: true,
       },
       breakpoints: {
-        768: {
-          slidesPerView: 2,
-        },
-        1024: {
-          slidesPerView: 3,
-        },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
       },
       autoplay: {
         delay: 3000,
@@ -95,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* --- 4. SCROLL EFECTİ (HEADER KÜÇÜLTME/GÖLGE) --- */
+  /* --- HEADER SCROLL --- */
   const header = document.querySelector(".navbar");
   if (header) {
     window.addEventListener("scroll", () => {
@@ -108,31 +113,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-});
 
-document.addEventListener("DOMContentLoaded", function() {
-    const reviews = document.querySelectorAll('.review-card');
+  /* --- REVIEWS --- */
+  const reviews = document.querySelectorAll(".review-card");
+  reviews.forEach((card) => {
+    const text = card.querySelector(".review-text");
+    const btn = card.querySelector(".read-more-btn");
 
-    reviews.forEach(card => {
-        const text = card.querySelector('.review-text');
-        const btn = card.querySelector('.read-more-btn');
+    if (text && text.scrollHeight > text.clientHeight) {
+      btn.style.display = "inline-block";
+    }
 
-        // Eğer metin belirlenen alandan daha uzunsa butonu göster
-        if (text.scrollHeight > text.clientHeight) {
-            btn.style.display = 'inline-block';
-        }
-
-        btn.addEventListener('click', function() {
-            text.classList.toggle('expanded');
-            
-            if (text.classList.contains('expanded')) {
-                btn.textContent = 'Daha Az Göster';
-            } else {
-                btn.textContent = 'Devamını Gör';
-            }
-            
-            // Swiper kullanıyorsan yüksekliği güncellemesi için:
-            if(typeof swiper !== 'undefined') swiper.updateAutoHeight();
-        });
+    btn.addEventListener("click", function () {
+      text.classList.toggle("expanded");
+      btn.textContent = text.classList.contains("expanded")
+        ? "Daha Az Göster"
+        : "Devamını Gör";
+      if (swiperInstance) swiperInstance.updateAutoHeight();
     });
+  });
 });
