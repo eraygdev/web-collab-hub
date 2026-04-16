@@ -3,55 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selam Tuğçe!</title>
+    <title>Aşkın Çapraz Hali</title>
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            background-color: #fff0f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fe9a9e, #fecfef);
+            background-size: 400% 400%;
+            animation: backgroundGradient 15s ease infinite;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
-        .selam-yazisi {
-            color: #ff69b4;
+        @keyframes backgroundGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Yağan Kalpler */
+        .heart-rain {
+            position: absolute;
+            color: rgba(255, 20, 147, 0.4);
+            font-size: 1.5rem;
+            animation: heartFall 4s linear infinite;
+            top: -50px;
+            z-index: 1;
+        }
+
+        @keyframes heartFall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* Çapraz Yerleşim Alanı */
+        .container {
+            position: relative;
+            width: 80vw;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .isim {
+            position: absolute;
+            color: #fff;
             font-size: 5rem;
-            font-weight: bold;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            animation: buyu-kucul 2s ease-in-out infinite alternate;
+            font-weight: 900;
+            text-transform: lowercase;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(0,0,0,0.2);
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        .komik-gif {
-            width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        /* TUĞÇE SAĞ ÜSTTE */
+        .tugce {
+            top: 0;
+            right: 0;
+            transform: rotate(5deg);
         }
 
-        @keyframes buyu-kucul {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
+        /* ZEYNEP SOL ALTTA */
+        .zeynep {
+            bottom: 0;
+            left: 0;
+            transform: rotate(-5deg);
         }
 
-        @media (max-width: 600px) {
-            .selam-yazisi { font-size: 3rem; }
-            .komik-gif { width: 250px; }
+        /* ORTADAKİ DEV KALP */
+        .orta-kalp {
+            font-size: 12rem;
+            color: #ff1493;
+            text-shadow: 0 0 50px rgba(255, 20, 147, 0.9);
+            animation: beat 0.8s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff1493; }
+            to { text-shadow: 0 0 20px #fff, 0 0 40px #ff69b4; }
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 768px) {
+            .isim { font-size: 3rem; }
+            .orta-kalp { font-size: 8rem; }
+            .container { height: 50vh; }
         }
     </style>
 </head>
 <body>
 
-    <div class="selam-yazisi">
-        selam tugcee
-    </div>
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-rain');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 4000);
+        }
+        setInterval(createHeart, 150);
+    </script>
 
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6_jwzXlP4WKsx6ne7ZzmKIFVCDjzWgpkcNg&s" 
-         alt="Komik Kedi" 
-         class="komik-gif">
+    <div class="container">
+        <div class="isim tugce">Tuğçe</div>
+        
+        <div class="orta-kalp">❤️</div>
+        
+        <div class="isim zeynep">Zeynep</div>
+    </div>
 
 </body>
 </html>
