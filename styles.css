@@ -703,6 +703,7 @@ footer {
 @media (max-width: 992px) {
     body.menu-open {
         transform: translateX(-300px);
+        overflow: hidden;
     }
 
     body.no-scroll {
@@ -733,22 +734,24 @@ footer {
     }
 
     .nav-links {
-        position: absolute !important;
-        top: -55px !important;
+        position: fixed !important;
+        top: 0 !important;
         right: -300px !important;
-        width: 300px;
+        width: 300px !important;
         height: 100vh !important;
+        visibility: hidden;
         gap: 15px;
         background: #ffffff;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
         flex-direction: column;
         justify-content: center;
         z-index: 2000;
-        transition: transform 0.4s ease-in-out !important;
+        transition: none !important;
     }
 
     body.menu-open .nav-links {
-        transform: translateX(0);
+        right: -300px !important;
+        visibility: visible;
     }
 
     .nav-links li {
