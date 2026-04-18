@@ -698,6 +698,12 @@ footer {
     font-size: 14px;
 }
 
+
+/* --- display: none --- */
+.menu-links {
+        display: none;
+}
+
 /* --- 11. MEDIA QUERIES (EN ALTTA TOPLANDI) --- */
 /* Tablet & Mobile (992px) */
 @media (max-width: 992px) {
